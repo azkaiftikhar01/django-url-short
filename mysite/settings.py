@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-
+import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -120,5 +120,26 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+import environ
+import os
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
+# Read the .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+DEBUG = env('DEBUG')
+SECRET_KEY = env('SECRET_KEY', default='unsafe-secret-key')
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+# Static files URL
+STATIC_URL = '/static/'
+
+# Directory to collect static files for production
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Additional directories for static files (if any)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # Optional: Your app-level or project-level static directory
+]

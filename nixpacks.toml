@@ -1,0 +1,10 @@
+[phases.setup]
+apt_packages = ["python3", "python3-pip", "python3-venv"]
+
+[phases.build]
+run = [
+  "pip install -r requirements.txt"
+]
+
+[phases.start]
+cmd = "gunicorn mysite.wsgi --bind 0.0.0.0:$PORT"
